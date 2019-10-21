@@ -1,8 +1,4 @@
-grammar toyrobot_commands;
-
-@header {
-package net.nogoodshots.toyrobot.commands;
-}
+grammar Commands;
 
 input: line+;
 
@@ -38,4 +34,4 @@ DIRECTION  : 'NORTH' | 'SOUTH' | 'EAST' | 'WEST';
 NUMBER     : [0-9]+ ;
 COMMA      : [,];
 WHITESPACE : [ \t]+ -> skip ; // skip spaces, tabs
-//NL:  [\r\n] -> skip; // newlines
+NL:  [\r\n] -> skip; // newlines
