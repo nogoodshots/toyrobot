@@ -1,14 +1,10 @@
 grammar Commands;
 
-input: line+;
+input: line*;
 
-line: blank_line # BlankLine
-    | comment # Com
+line: comment # Com
     | action # Act
     ;
-
-blank_line : blank;
-blank : (WHITESPACE)* NL;
 
 comment_line: comment;
 comment : COMMENT;
