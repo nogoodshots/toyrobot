@@ -1,15 +1,15 @@
 grammar Commands;
 
-input: line*;
+input: line+;
 
 line: comment # Com
     | action # Act
     ;
 
-comment_line: comment;
-comment : COMMENT;
+comment : COMMENT NL?;
+blank : WHITESPACE* NL?;
 
-//action_line: action;
+action_line: action NL?;
 action : (place_action | move_action | left_action | right_action | report_action);
 
 place_action : PLACE NUMBER COMMA NUMBER COMMA DIRECTION;

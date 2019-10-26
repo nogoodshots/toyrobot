@@ -34,7 +34,7 @@ public class Simulation {
             }
 
             final RobotAction robotAction = (RobotAction) action;
-            // Perform the action
+            // Perform the action, ignore any invalid actions
             return robot.performAction(robotAction);
         } else {
             return new ActionIgnored();

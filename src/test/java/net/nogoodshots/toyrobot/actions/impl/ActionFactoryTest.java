@@ -46,15 +46,6 @@ public class ActionFactoryTest {
         factory.parseActions(null);
     }
 
-    @Test(expected = IllegalCommandException.class)
-    public void GIVEN_blank_line_WHEN_parse_THEN_throw_exception() throws Exception {
-        printWriter.println(" ");
-        printWriter.flush();
-
-        factory.parseActions(new ByteArrayInputStream(((ByteArrayOutputStream)os).toByteArray()));
-        verify(mockHandler, never()).handleAction(any(Action.class));
-    }
-
     @Test
     public void GIVEN_comment_WHEN_parse_THEN_return_no_action() throws Exception {
         {

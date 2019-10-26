@@ -7,7 +7,7 @@ import java.util.Optional;
  * Today the only visible result is a message. Actions that result in some intervention or the
  * termination of the simulation may be implemented later.
  */
-public abstract class Outcome {
+public class Outcome {
 
     protected final String message;
 
