@@ -15,6 +15,7 @@ Robot, Board, Simulation, BoardPosition
 * Add logging - the one off cost of adding Log4j support and logging statements
 * Investigate alternatives to CharStream.fromStream as this closes the input stream as soon as it is empty. Ideally a blocking read could be used and then commands can be streamed to the handler. Practically this limits the simulation to creating an input stream per input.
 * Make parameterless RobotAction, like MoveAction comparable to support handling in collections. Suggest adding a timestamp to allow instances to be compared
+* Consider using a Vistor pattern with the Action classes. This may be more extensible later when actions involving the board or things other than the robot.
 
 **Build**
 
@@ -25,6 +26,16 @@ Requirements
 From the root folder of the project:
 ```
 mvn compile dependency:copy-dependencies package
+```
+To run the simulation: 
+```
 (cd target; java -cp toyrobot-1.0-SNAPSHOT.jar:dependency/* net.nogoodshots.toyrobot.App)
 ```
+This will read commands from StdIn. The App also accepts a file name containing commands.
 
+**Testing**
+
+Sample files exist in src/test/resources to illustrate 
+```
+(cd target; for f in `find ../src/test/resources -type f`; do echo "Running $f"; java -cp toyrobot-1.0-SNAPSHOT.jar:dependency/* net.nogoodshots.toyrobot.App $f; done)
+```

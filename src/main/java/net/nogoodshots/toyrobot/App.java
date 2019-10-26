@@ -4,64 +4,86 @@ import net.nogoodshots.toyrobot.actions.impl.ActionFactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Logger;
 
 /**
- * Hello world!
+ * Main App to run the ToyRobot Simulation from.
  *
  */
 public class App 
 {
-    private static final Logger LOG = Logger.getLogger(App.class.getName());
-
-    private Simulation simulation;
-    private ActionFactory actionFactory;
+    private final Simulation simulation;
+    private final ActionFactory actionFactory;
+    private final BufferedReader bufferedReader;
 
     public static void main( String[] args )
     {
-        final App app = new App();
+        App app;
+        if (args != null && args.length > 0) {
+            // Determine an input file from arg[0]
+            app = new App(new File(args[0]));
+        } else {
+            app = new App();
+        }
         app.run();
     }
 
     public App() {
+        this(null);
+    }
+
+    public App(final File actionInputFile) {
+        // Prepare BufferedReader to read from StdIn or File
+        if (actionInputFile != null) {
+            if (actionInputFile.exists() && actionInputFile.isFile()) {
+                try {
+                    bufferedReader = new BufferedReader(new FileReader(actionInputFile));
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(String.format("Cannot access file %s", actionInputFile.getAbsoluteFile()), e);
+                }
+            } else {
+                throw new IllegalArgumentException(String.format("%s is not a valid existing file", actionInputFile.getAbsolutePath()));
+            }
+        } else {
+            bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        }
+        // Construct a Simulation with a default Board and StdOut as the default
+        // OutputStream
         simulation = new Simulation(new Board());
         actionFactory = new ActionFactory(new ActionHandler() {
             @Override
             public void handleAction(Action action) {
-                final Outcome outcome = simulation.takeAction(action);
-                if (outcome.getMessage().isPresent()) {
-                    System.out.println(outcome.getMessage().get());
+                try {
+                    final Outcome outcome = simulation.takeAction(action);
+                } catch (IOException e) {
+                    throw new RuntimeException("Exiting: Internal error", e);
                 }
             }
         });
     }
 
+
     public void run() {
         try {
-            readStdin();
+            act();
+            System.out.println("Exiting");
         } catch (IOException ioe) {
             System.err.println(String.format("Exiting - error: %s", ioe.getMessage()));
         }
     }
 
-    public void readStdin() throws IOException {
-        //Enter data using BufferReader
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
+    private void act() throws IOException {
         String inputLine;
         do {
-            inputLine = reader.readLine();
-            LOG.info(String.format("Read %s", inputLine));
+            inputLine = bufferedReader.readLine();
             if (inputLine != null) {
+                System.out.println(inputLine);
                 actionFactory.parseActions(new ByteArrayInputStream(inputLine.getBytes()));
             }
         } while (inputLine != null);
-        LOG.info(String.format("Exiting"));
     }
 
-    public void readInputFile() {
-
-    }
 }

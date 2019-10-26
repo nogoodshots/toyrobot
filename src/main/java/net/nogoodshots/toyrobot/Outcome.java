@@ -3,7 +3,7 @@ package net.nogoodshots.toyrobot;
 import java.util.Objects;
 import java.util.Optional;
 
-/** Outcome is the visible result of an Action being taken.
+/** Outcome is the visible result of an {@link Action} being taken.
  * Today the only visible result is a message. Actions that result in some intervention or the
  * termination of the simulation may be implemented later.
  */

@@ -6,7 +6,6 @@ import net.nogoodshots.toyrobot.commands.CommandsLexer;
 import net.nogoodshots.toyrobot.commands.CommandsBaseListener;
 import net.nogoodshots.toyrobot.commands.CommandsListener;
 import net.nogoodshots.toyrobot.commands.CommandsParser;
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,21 +21,24 @@ import java.io.InputStream;
 import java.util.BitSet;
 import java.util.Objects;
 
+/** Using the Commands.g4 grammar parse the given {@link InputStream} converting the String contents into {@link net.nogoodshots.toyrobot.Action}
+ * objects.
+ */
 public class ActionFactory {
 
     private final ActionHandler handler;
     private final CommandsListener listener;
 
+    /**
+     * Construct a new ActionHandler.
+     * @param handler Consumer of identified {@link net.nogoodshots.toyrobot.Action}. This should not be null.
+     */
     public ActionFactory(final ActionHandler handler) {
         Objects.requireNonNull(handler);
 
         this.handler = handler;
 
         this.listener = new CommandsBaseListener() {
-//            @Override
-//            public void exitCom(CommandsParser.ComContext ctx) {
-//                super.exitCom(ctx);
-//            }
 
             @Override
             public void exitPlace_action(CommandsParser.Place_actionContext ctx) {
@@ -73,6 +75,12 @@ public class ActionFactory {
         };
     }
 
+    /** Consume from the given {@link InputStream} converting the contents into {@link net.nogoodshots.toyrobot.Action} objects.
+     * Pass those {@link net.nogoodshots.toyrobot.Action} to the {@link ActionHandler}.
+     * @param input {@link InputStream} to consume. This should not be null.
+     * @throws IOException thrown if input cannot be consumed.
+     * @throws IllegalCommandException thrown if the content of input cannot be converted.
+     */
     public void parseActions(final InputStream input) throws IOException, IllegalCommandException {
 
         // ToDo investigate alternatives to CharStreams.fromStream(input) that would support streaming
@@ -81,9 +89,6 @@ public class ActionFactory {
         final CommandsLexer lexer = new CommandsLexer(CharStreams.fromStream(input));
         final CommandsParser parser = new CommandsParser(new CommonTokenStream(lexer));
 
-//        final
-//        new BailErrorStrategy()
-//                parser.
         // To aid debugging add an error handler
         parser.addErrorListener(new BaseErrorListener() {
             @Override

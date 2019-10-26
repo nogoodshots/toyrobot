@@ -9,12 +9,19 @@ import net.nogoodshots.toyrobot.actions.impl.RightTurnAction;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Main inhabitant of {@link Simulation}.
+ */
 public class Robot {
 
     private final Board board;
     private BoardPosition boardPosition;
     private Direction facingDirection;
 
+    /** Construct a new {@link Robot}.
+     *
+     * @param board The space which the {@link Robot} can occupy. This should not be null.
+     */
     public Robot(final Board board) {
         Objects.requireNonNull(board, "Robot board cannot be null");
         this.board = board;
@@ -34,6 +41,11 @@ public class Robot {
         return Optional.ofNullable(facingDirection);
     }
 
+    /** The {@link Robot} should interact with the {@link net.nogoodshots.toyrobot.Simulation}.
+     *
+     * @param action The legal {@link RobotAction} to be attempted. This should not be null.
+     * @return The {@link Outcome} of attempting the {@link RobotAction}
+     */
     public Outcome performAction(final RobotAction action) {
         Objects.requireNonNull(action, "Robot performAction cannot accept null action");
         try {
