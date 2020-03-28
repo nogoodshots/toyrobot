@@ -23,5 +23,5 @@ steps:
     goals: 'package site'
 - task: PublishCodeCoverageResults@1
   inputs:
-    codeCoverageTool: 'JaCoCo'
+    codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(System.DefaultWorkingDirectory)/toyrobot/**/site/cobertura/coverage.xml'
