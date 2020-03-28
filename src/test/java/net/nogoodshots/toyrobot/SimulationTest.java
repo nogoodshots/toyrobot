@@ -47,7 +47,7 @@ public class SimulationTest {
     }
 
     @Test
-    public void GIVEN_new_sim_WHEN_takeAction_RobotAction_THEN_do_nothing() {
+    public void GIVEN_new_sim_WHEN_takeAction_RobotAction_THEN_do_nothing() throws Exception{
         {
             final Outcome outcome = simulation.takeAction(new RobotAction() {
             });
@@ -57,14 +57,14 @@ public class SimulationTest {
     }
 
     @Test
-    public void GIVEN_new_sim_WHEN_takeAction_unknown_action_THEN_do_nothing() {
+    public void GIVEN_new_sim_WHEN_takeAction_unknown_action_THEN_do_nothing() throws Exception {
         final Outcome outcome = simulation.takeAction(new Action(){});
         assertFalse(outcome.getMessage().isPresent());
         assertTrue(outcome instanceof ActionIgnored);
     }
 
     @Test
-    public void GIVEN_new_sim_WHEN_takeAction_RobotAction_THEN_do_something() {
+    public void GIVEN_new_sim_WHEN_takeAction_RobotAction_THEN_do_something() throws Exception {
         final Outcome outcome = simulation.takeAction(new PlaceAction(1, 2, Direction.NORTH));
         assertFalse(outcome.getMessage().isPresent());
         assertFalse(outcome instanceof ActionIgnored);
